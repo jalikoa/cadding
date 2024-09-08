@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JalSoft Web CAD - SVG Design</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        body {
+            font-family: Arial;
+            color:#fff;
+            background: #333;
+        }
+        #svgCanvas {
+            border: 1px solid black;
+            width: 600px;
+            height: 700px;
+            background-color: #fff;
+        }
+       #tools button {
+            margin: 5px;
+            padding:5px;
+            border-radius: 5px;
+            color:#fff;
+            background: #333;
+            cursor:pointer;
+            width:90px;
+            border:1px solid #dde;
+        }
+        #tools {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding:5px 5px;
+            position:fixed;
+            top:85px;
+            left:0;
+            background-color:rgba(96,96,96);
+            width:140px;
+        }
+        .draw-page {
+            margin-left:150px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #dde;
+            margin-top: 50px;
+            margin-bottom:75px;
+        }
+        footer  {
+            position:fixed;
+            bottom:0px;
+            right:0px;
+            height:70px;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            width:100%;
+            background:#333;
+        }
+        .fillColor {
+            position:relative;
+            width:50px;
+            height:18px;
+            border:1px solid #ddd;
+            border-radius: 5px;
+        }
+        .fillColor span {
+            position:absolute;
+            background:#ffffff60;
+            top:-25px;
+            left:0px;
+            padding:2px 2px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>JalSoft Web CAD - SVG Design</h1>
+    <div id="tools">
+        <button onclick="startDrawing('rect')">Rectangle</button>
+        <button onclick="startDrawing('line')">Line</button>
+        <button onclick="startDrawing('circle')">Circle</button>
+        <button onclick="startDrawing('ellipse')">Ellipse</button>
+        <button onclick="startDrawing('polygon')">Polygon</button>
+        <button onclick="startFreehand()">Freehand</button>
+        <button onclick="clearCanvas()">Clear</button>
+        <button onclick="saveSVG()">Save SVG</button>
+    </div>
+    <div class="draw-page">
+    <svg id="svgCanvas" xmlns="http://www.w3.org/2000/svg">
+        <!-- /*Drawn By JalSoft CAD*/ -->
+    </svg>
+    </div>
+    <footer>
+        <div id="fill"><label for="fill-color">Fill</label><input type="color" id="fill-color" value="#999999"><input onclick="resetFill()" type="button" value="none"></div>
+        <div id="stroke"><label for="stroke-color">Stroke color</label><input type="color" id="stroke-color"></div>
+        <div id="stroke-width"><input type="number" id="stroke-width" value="3"></div>
+        <button class="fillColor"><span>Blue</span></button>
+    </footer>
+    <script src="./script.js">
+    </script>
+</body>
+</html>

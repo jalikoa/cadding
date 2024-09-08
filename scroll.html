@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll & Screen Detection</title>
+    <style>
+        body {
+            height: 2000px;  /* Just to enable scrolling */
+        }
+        #scrollButton {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        #target {
+            margin-top: 1500px;
+            background-color: lightblue;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="scrollButton">Scroll to Target</div>
+    <div id="target">Target Element</div>
+
+    <script>
+        // Detect screen size on load and resize
+        function getScreenSize() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            console.log(`Screen Width: ${width}, Screen Height: ${height}`);
+        }
+        window.addEventListener('resize', getScreenSize);
+        getScreenSize();  // Call initially
+
+        // Scroll to the target element when button is clicked
+        const scrollButton = document.getElementById('scrollButton');
+        scrollButton.addEventListener('click', function() {
+            const target = document.getElementById('target');
+            target.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Listen to the scroll position
+        window.addEventListener('scroll', function() {
+            console.log(`Current Scroll Y Position: ${window.scrollY}px`);
+        });
+    </script>
+</body>
+</html>
