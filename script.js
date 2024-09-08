@@ -1,14 +1,15 @@
-
 let drawing = false;
 let currentShape = null;
 let startX, startY;
 let points = [];
 let fillColor = document.getElementById("fill-color");
 let strokeColor = document.getElementById("stroke-color");
-let strokewidth = document.getElementById("stroke-width");
-function resetFill(){
+let strokeWidth = document.getElementById("stroke-width");
+
+function resetFill() {
     fillColor.value = 'none';
 }
+
 // Start drawing shapes
 function startDrawing(shape) {
     currentShape = shape;
@@ -22,7 +23,7 @@ function startFreehand() {
 // Clear the canvas
 function clearCanvas() {
     const svgCanvas = document.getElementById('svgCanvas');
-    svgCanvas.innerHTML = '';
+    svgCanvas.innerHTML = ''; // Clears all the SVG child elements
 }
 
 // Handle mouse down (start drawing)
@@ -30,8 +31,8 @@ document.getElementById('svgCanvas').addEventListener('mousedown', function (e) 
     drawing = true;
     const svgCanvas = e.target;
     const rect = svgCanvas.getBoundingClientRect();
-    startX = e.clientX-rect.left;
-    startY = e.clientY-rect.top;
+    startX = e.clientX - rect.left;
+    startY = e.clientY - rect.top;
     points = [];
 
     if (currentShape === 'rect') {
@@ -40,8 +41,8 @@ document.getElementById('svgCanvas').addEventListener('mousedown', function (e) 
         rectElement.setAttribute('y', startY);
         rectElement.setAttribute('width', 1);
         rectElement.setAttribute('height', 1);
-        rectElement.setAttribute('fill', 'none');
-        rectElement.setAttribute('stroke-width',strokewidth.value);
+        rectElement.setAttribute('fill', fillColor.value);
+        rectElement.setAttribute('stroke-width', strokeWidth.value);
         rectElement.setAttribute('stroke', strokeColor.value);
         rectElement.setAttribute('id', 'currentShape');
         svgCanvas.appendChild(rectElement);
@@ -51,7 +52,7 @@ document.getElementById('svgCanvas').addEventListener('mousedown', function (e) 
         lineElement.setAttribute('y1', startY);
         lineElement.setAttribute('x2', startX);
         lineElement.setAttribute('y2', startY);
-        lineElement.setAttribute('stroke-width',strokewidth.value);
+        lineElement.setAttribute('stroke-width', strokeWidth.value);
         lineElement.setAttribute('stroke', strokeColor.value);
         lineElement.setAttribute('id', 'currentShape');
         svgCanvas.appendChild(lineElement);
@@ -60,8 +61,8 @@ document.getElementById('svgCanvas').addEventListener('mousedown', function (e) 
         circleElement.setAttribute('cx', startX);
         circleElement.setAttribute('cy', startY);
         circleElement.setAttribute('r', 1);
-        circleElement.setAttribute('fill', 'none');
-        circleElement.setAttribute('stroke-width',strokewidth.value);
+        circleElement.setAttribute('fill', fillColor.value);
+        circleElement.setAttribute('stroke-width', strokeWidth.value);
         circleElement.setAttribute('stroke', strokeColor.value);
         circleElement.setAttribute('id', 'currentShape');
         svgCanvas.appendChild(circleElement);
@@ -71,8 +72,8 @@ document.getElementById('svgCanvas').addEventListener('mousedown', function (e) 
         ellipseElement.setAttribute('cy', startY);
         ellipseElement.setAttribute('rx', 1);
         ellipseElement.setAttribute('ry', 1);
-        ellipseElement.setAttribute('fill', 'none');
-        ellipseElement.setAttribute('stroke-width',strokewidth.value);
+        ellipseElement.setAttribute('fill', fillColor.value);
+        ellipseElement.setAttribute('stroke-width', strokeWidth.value);
         ellipseElement.setAttribute('stroke', strokeColor.value);
         ellipseElement.setAttribute('id', 'currentShape');
         svgCanvas.appendChild(ellipseElement);
@@ -80,12 +81,12 @@ document.getElementById('svgCanvas').addEventListener('mousedown', function (e) 
         points.push([startX, startY]);
     } else if (currentShape === 'freehand') {
         const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        pathElement.setAttribute('d', `M${startX+10},${startY+10}`);
-        pathElement.setAttribute('stroke', fillColor.value);
-        pathElement.setAttribute('fill', fillColor.value);
-        pathElement.setAttribute('stroke-linecap','round');
-        pathElement.setAttribute('stroke-linejoin','round')
-        pathElement.setAttribute('stroke-width',strokewidth.value);
+        pathElement.setAttribute('d', `M${startX},${startY}`);
+        pathElement.setAttribute('stroke', strokeColor.value);
+        pathElement.setAttribute('fill', 'none');
+        pathElement.setAttribute('stroke-width', strokeWidth.value);
+        pathElement.setAttribute('stroke-linecap', 'round');
+        pathElement.setAttribute('stroke-linejoin', 'round');
         pathElement.setAttribute('id', 'currentShape');
         svgCanvas.appendChild(pathElement);
     }
@@ -96,8 +97,8 @@ document.getElementById('svgCanvas').addEventListener('mousemove', function (e) 
     if (!drawing) return;
     const svgCanvas = e.target;
     const rect = svgCanvas.getBoundingClientRect();
-    const mouseX = e.clientX-rect.left;
-    const mouseY = e.clientY-rect.top ;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
     const currentElement = document.getElementById('currentShape');
 
     if (currentShape === 'rect') {
@@ -120,20 +121,21 @@ document.getElementById('svgCanvas').addEventListener('mousemove', function (e) 
         currentElement.setAttribute('ry', ry);
     } else if (currentShape === 'freehand') {
         const path = currentElement.getAttribute('d');
-        currentElement.setAttribute('d', path + `L${mouseX},${mouseY}`);
+        currentElement.setAttribute('d', `${path} L${mouseX},${mouseY}`);
     }
 });
 
 // Handle mouse up (end drawing)
 document.getElementById('svgCanvas').addEventListener('mouseup', function () {
     drawing = false;
-    document.getElementById('currentShape').removeAttribute('id');
+    const currentElement = document.getElementById('currentShape');
+    if (currentElement) currentElement.removeAttribute('id');
 });
 
 // Save SVG
 function saveSVG() {
     const svgData = document.getElementById('svgCanvas').outerHTML;
-    const svgBlob = new Blob([svgData], { type: 'image/svg' });
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
     const svgUrl = URL.createObjectURL(svgBlob);
     const downloadLink = document.createElement('a');
     downloadLink.href = svgUrl;
@@ -142,4 +144,3 @@ function saveSVG() {
     downloadLink.click();
     document.body.removeChild(downloadLink);
 }
-console.log(strokewidth.value);
